@@ -1,0 +1,17 @@
+[Unit]
+Description=Re-enable the ASUS dGPU if Windows/Armoury Crate disabled it in firmware
+Documentation=https://github.com/metoi01/asus-dgpu-guard
+DefaultDependencies=no
+After=local-fs.target systemd-udev-trigger.service
+Before=display-manager.service plasmalogin.service gdm.service sddm.service
+Before=supergfxd.service cardwired.service nvidia-powerd.service nvidia-persistenced.service
+ConditionPathExists=|/sys/class/firmware-attributes
+ConditionPathExists=|/sys/devices/platform/asus-nb-wmi
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dgpu-guard.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
